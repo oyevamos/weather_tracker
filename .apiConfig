@@ -1,3 +1,5 @@
 {
-    "OpenWeatherMapApiKey":"апишечка"
+    "OpenWeatherMapApiKey":"апишечка",
+    "City": "Moscow"
+
 }
