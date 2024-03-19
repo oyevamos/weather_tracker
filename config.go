@@ -8,6 +8,7 @@ import (
 type apiConfigData struct {
 	OpenWeatherMapApiKey string `json:"OpenWeatherMapApiKey"`
 	City                 string `json:"City"`
+	Port                 string `json:"Port"`
 }
 
 func loadApiConfig(filename string) (apiConfigData, error) {

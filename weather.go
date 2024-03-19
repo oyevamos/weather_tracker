@@ -14,6 +14,7 @@ type weatherData struct {
 
 func queryWeather() (weatherData, error) {
 	apiConfig, err := loadApiConfig(".apiConfig")
+
 	if err != nil {
 		return weatherData{}, err
 	}

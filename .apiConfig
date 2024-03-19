@@ -1,5 +1,5 @@
 {
     "OpenWeatherMapApiKey":"a01379c5976a9679938ed8a6d6cec857",
-    "City": "Moscow"
-
+    "City": "London",
+    "Port": "8080"
 }
