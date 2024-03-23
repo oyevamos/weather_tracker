@@ -2,13 +2,15 @@ package main
 
 import (
 	"fmt"
+	"github.com/oyevamos/weather_tracker.git/config"
+	"github.com/oyevamos/weather_tracker.git/repository"
 	"log"
 	"net"
 	"net/http"
 )
 
 func main() {
-	apiConfig, err := loadApiConfig("C:/Users/User/Desktop/FILES/go/weather_tracker/weather_tracker/.apiConfig")
+	apiConfig, err := config.LoadApiConfig("C:/Users/User/Desktop/FILES/go/weather_tracker/weather_tracker/.apiConfig")
 	if err != nil {
 		log.Fatal("Ошибка при загрузке конфигурации: ", err)
 	}
@@ -16,6 +18,11 @@ func main() {
 	port := apiConfig.Port
 	if port == "" {
 		port = "0" // показывает что я не хочу конерктизироваить порт, его выберет система.
+	}
+
+	_, err = repository.NewWeather(apiConfig.Postgres)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	listener, err := net.Listen("tcp", ":"+port)

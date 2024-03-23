@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/oyevamos/weather_tracker.git/config"
 	"net/http"
 )
 
@@ -13,7 +14,7 @@ type weatherData struct {
 }
 
 func queryWeather() (weatherData, error) {
-	apiConfig, err := loadApiConfig(".apiConfig")
+	apiConfig, err := config.LoadApiConfig(".apiConfig")
 
 	if err != nil {
 		return weatherData{}, err
