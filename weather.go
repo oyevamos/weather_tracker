@@ -1,34 +1,46 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/oyevamos/weather_tracker.git/config"
+	"github.com/oyevamos/weather_tracker.git/convert"
+	"github.com/oyevamos/weather_tracker.git/models"
+	"github.com/oyevamos/weather_tracker.git/repository"
 	"net/http"
+	"time"
 )
 
-type weatherData struct {
-	Name string `json:"name"`
-	Main struct {
-		Kelvin float64 `json:"temp"`
-	} `json:"main"`
+type WeatherService struct {
+	repo *repository.WeatherRepository
 }
 
-func queryWeather() (weatherData, error) {
-	apiConfig, err := config.LoadApiConfig(".apiConfig")
+func NewWeatherService(repo *repository.WeatherRepository) WeatherService {
+	return WeatherService{
+		repo: repo,
+	}
+}
 
+func (w WeatherService) addWeather(ctx context.Context) error {
+	apiConfig, err := config.LoadApiConfig(".apiConfig")
 	if err != nil {
-		return weatherData{}, err
+		return err
 	}
 
 	resp, err := http.Get("http://api.openweathermap.org/data/2.5/weather?APPID=" + apiConfig.OpenWeatherMapApiKey + "&q=" + apiConfig.City + "&units=metric")
 	if err != nil {
-		return weatherData{}, err
+		return err
 	}
 	defer resp.Body.Close()
 
-	var d weatherData
+	var d models.WeatherData
 	if err := json.NewDecoder(resp.Body).Decode(&d); err != nil {
-		return weatherData{}, err
+		return err
 	}
-	return d, nil
+
+	return w.repo.AddWeather(ctx, convert.WeatherDataToDomain(d))
+}
+
+func (w WeatherService) deleteWeather(ctx context.Context, date time.Time) error {
+	return w.repo.DeleteWeather(ctx, date)
 }

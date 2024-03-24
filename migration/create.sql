@@ -1,7 +1,7 @@
 CREATE TABLE weather
 (
-    kelvin     integer    NOT NULL,
-    celsius    integer    NOT NULL,
+    kelvin     float    NOT NULL,
+    celsius    float    NOT NULL,
     city       varchar    NOT NULL,
     date       date       NOT NULL
 );

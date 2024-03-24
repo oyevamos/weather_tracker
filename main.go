@@ -20,10 +20,13 @@ func main() {
 		port = "0" // показывает что я не хочу конерктизироваить порт, его выберет система.
 	}
 
-	_, err = repository.NewWeather(apiConfig.Postgres)
+	repo, err := repository.NewWeather(apiConfig.Postgres)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	service := NewWeatherService(repo)
+	controller := newWeatherController(service)
 
 	listener, err := net.Listen("tcp", ":"+port)
 	if err != nil {
@@ -33,8 +36,8 @@ func main() {
 
 	fmt.Printf("Сервер запущен на порту %d\n", listener.Addr().(*net.TCPAddr).Port) //заклинание для нахождения свободного порта, взято отсюда https://stackoverflow.com/questions/43424787/how-to-use-next-available-port-in-http-listenandserve
 
-	setupWeatherRoutes()
-	http.HandleFunc("/hello", helloHandler)
+	setupWeatherRoutes(controller)
+	http.HandleFunc("/hello", controller.helloHandler)
 
 	http.Serve(listener, nil) // Запускаем сервер с использованием созданного listener
 }
