@@ -12,6 +12,7 @@ func WeatherDataToDomain(data models.WeatherData) domain.Weather {
 	return domain.Weather{
 		City:    data.Name,
 		Celsius: data.Main.Celsius,
+		/// comment magic number
 		Kelvin:  data.Main.Celsius + 273.15,
 		Date:    now,
 	}
